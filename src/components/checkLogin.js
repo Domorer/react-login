@@ -20,7 +20,7 @@ class CheckLogin extends Component {
                     if (res.data.code === 0) {
                         this.props.getUserInfo(res.data.data)
                     } else {
-                        this.props.history.push('/login')
+                        this.props.history.push('/login');
                     }
                 }
             })

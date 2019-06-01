@@ -1,9 +1,9 @@
 const express = require('express');
 const userRouter = require('./user')
 const cookieParser = require('cookie-parser')
-app.use(cookieParser())
 // 新建app
 const app = express();
+app.use(cookieParser())
 
 app.use('/user', userRouter)
 

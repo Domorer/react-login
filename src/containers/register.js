@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {List, InputItem, WingBlank, WhiteSpace, Button, Radio} from 'antd-mobile'
 import {connect} from 'react-redux'
-import {register} from '../../redux/user.redux'
-import Logo from '../../components/logo/logo'
+import {register} from '../redux/user.redux'
 
 @connect(
     state=> state,
@@ -27,7 +26,6 @@ class Register extends Component {
         const RadioItem = Radio.RadioItem
         return (
             <div className="page-register">
-                <Logo/>
                 <List>
                     <InputItem onChange={value => this.handleChange('username', value)}>lbj-账号</InputItem>
                     <InputItem onChange={value => this.handleChange('pwd', value)}>lbj-密码</InputItem>
@@ -46,9 +44,9 @@ class Register extends Component {
                 <WhiteSpace></WhiteSpace>
                 <WhiteSpace></WhiteSpace>
                 <WingBlank>
-                    <Button type="primary" onClick={this.handleRegister}>注册</Button>
+                    <Button type="primary" onClick={()=>this.handleRegister}>注册</Button>
                     <WhiteSpace></WhiteSpace>
-                    <Button onClick={this.handleGoLogin.bind(this)} type="primary">已有账号，去登录</Button>
+                    <Button onClick={()=>this.handleGoLogin.bind(this)} type="primary">已有账号，去登录</Button>
                 </WingBlank>
             </div>
         )

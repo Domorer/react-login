@@ -38,10 +38,8 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <div className="react-login-register">
-                <CheckLogin>
-                    <Route path='/login' component={Login}></Route>
-                    <Route path='/register' component={Register}></Route>
-                </CheckLogin>
+                <Route exact path='/login' component={Login}></Route>
+                <Route exact path='/register' component={Register}></Route>
             </div>
         </Router>
     </Provider>,
