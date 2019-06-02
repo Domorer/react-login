@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {register} from '../redux/user.redux';
-import {Button, Form, Col} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { register } from '../redux/user.redux';
+import { Button, Form, Col } from 'react-bootstrap';
 import '../style/register.css';
-
-@connect (state => state, {register})
+import {withRouter} from 'react-router-dom'
+@withRouter
+@connect(state => state, { register })
 class Register extends Component {
-  constructor (props) {
-    super (props);
+  constructor(props) {
+    super(props);
     this.state = {
       username: '', //账号
       email: '', //邮箱
@@ -17,7 +18,7 @@ class Register extends Component {
     };
   }
 
-  render () {
+  render() {
     return (
       <div>
         <Form className="register">
@@ -27,7 +28,7 @@ class Register extends Component {
               <Form.Control
                 type="username"
                 placeholder="Enter username"
-                onChange={e => this.handleChange ('username', e.target.value)}
+                onChange={e => this.handleChange('username', e.target.value)}
               />
             </Form.Group>
 
@@ -36,7 +37,7 @@ class Register extends Component {
               <Form.Control
                 type="password"
                 placeholder="Password"
-                onChange={e => this.handleChange ('pwd', e.target.value)}
+                onChange={e => this.handleChange('pwd', e.target.value)}
               />
             </Form.Group>
           </Form.Row>
@@ -46,7 +47,7 @@ class Register extends Component {
             <Form.Control
               placeholder="Enter your email"
               type="email"
-              onChange={e => this.handleChange ('email', e.target.value)}
+              onChange={e => this.handleChange('email', e.target.value)}
             />
           </Form.Group>
 
@@ -54,14 +55,14 @@ class Register extends Component {
             <Form.Group as={Col} controlId="formGridProvince">
               <Form.Label>Province</Form.Label>
               <Form.Control
-                onChange={e => this.handleChange ('prov', e.target.value)}
+                onChange={e => this.handleChange('prov', e.target.value)}
               />
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>City</Form.Label>
               <Form.Control
-                onChange={e => this.handleChange ('city', e.target.value)}
+                onChange={e => this.handleChange('city', e.target.value)}
               />
             </Form.Group>
 
@@ -78,7 +79,7 @@ class Register extends Component {
           <Button
             variant="primary"
             type="submit"
-            onClick={() => this.handleRegister ().bind (this)}
+            onClick={() => this.handleRegister()}
           >
             注册
           </Button>
@@ -86,23 +87,22 @@ class Register extends Component {
       </div>
     );
   }
-  handleRegister () {
-    console.log ('yes!');
-    this.props.register (this.state);
-    console.log (this.state);
+  handleRegister = () => {
+    this.props.register(this.state);
+    this.props.history.push('/login')
   }
   /*
     *     去登录
     * */
-  handleGoLogin () {
-    this.props.history.push ('/login');
+  handleGoLogin = () => {
+    this.props.history.push('/login');
   }
 
   /*
     *     绑定表单值
     * */
-  handleChange (key, val) {
-    this.setState ({
+  handleChange = (key, val) => {
+    this.setState({
       [key]: val,
     });
   }

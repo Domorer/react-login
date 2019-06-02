@@ -30,7 +30,7 @@ td{
     white-space: nowrap;  
 }
 Table#cardEncrypt td.scroll{
-    overflow-x:scroll;
+    /* overflow-x:scroll; */
 }
 
 

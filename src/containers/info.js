@@ -25,8 +25,8 @@ class Info extends Component {
     render() {
         return (
             <div style={styleInfo}>
-                <InfoTable data={this.state.dataDecrypt} bgColor={'white'} cardId={'cardDecrypt'} key={'Decrypt'}></InfoTable>
-                <InfoTable data={this.state.dataEncrypt} bgColor={'white'} cardId={'cardEncrypt'} key={'Encrypt'}></InfoTable>
+                <InfoTable data={this.state.dataDecrypt} bgColor={'dark'} cardId={'cardDecrypt'} key={'Decrypt'}></InfoTable>
+                <InfoTable data={this.state.dataEncrypt} bgColor={'dark'} cardId={'cardEncrypt'} key={'Encrypt'}></InfoTable>
             </div>
         )
     }

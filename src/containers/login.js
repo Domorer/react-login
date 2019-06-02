@@ -35,23 +35,24 @@ class Login extends Component {
                 <Form.Text className="text-muted">
                     没有账号？去<a href='/register'>注册</a>.
                     </Form.Text>
-                <Button id='bt_lg' variant="primary" type="submit" onClick={() => this.handleLogin().bind(this)} block>登录</Button>
+                <Button id='bt_lg' variant="primary" type="submit" onClick={() => this.handleLogin()} block>登录</Button>
             </Form>
         )
     }
     /*
     *     去注册
     * */
-    handleLogin() {
+    handleLogin = () => {
         console.log('test');
-        this.props.login(this.state)
+        this.props.login(this.state).bind(this)
+        // this.props.history.push('/info')
     }
 
-    handleGoRegister() {
+    handleGoRegister = () => {
         this.props.history.push('/register');
     }
 
-    handleChange(key, val) {
+    handleChange = (key, val) => {
         this.setState({
             [key]: val
         })

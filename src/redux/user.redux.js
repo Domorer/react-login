@@ -114,8 +114,10 @@ export function login({
             })
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
+                    this.props.hostory.push('/info')
                     dispatch(loginSuccess(res.data.data))
                 } else {
+                    this.props.hostory.push('/info')
                     dispatch(toDoFail(res.data.msg))
                 }
             })
