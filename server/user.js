@@ -1,4 +1,5 @@
 // user.js
+const cryptico = require('cryptico')
 const express = require('express')
 const model = require('./model')
 const User = model.getModel('user')
@@ -7,12 +8,23 @@ const utils = require('utility')
 
 // 生成express路由中间件
 const Router = express.Router();
+const PUBLICK_KEY = 'uXjrkGqe5WuS7zsTg6Z9DuS8cXLFz38ue+xrFzxrcQJCXtVccCoUFP2qH/AQ4qMvxxvqkSYBpRm1R5a4/NdQ5ei8sE8gfZEq7dlcR+gOSv3nnS4/CX1n5Z5m8bvFPF0lSZnYQ23xlyjXTaNacmV0IuZbqWd4j9LfdAKq5dvDaoE='
 
 // 封装MD5加密规则
 function my_md5(pwd) {
     const xiao = 'akdf352FHhjfFHI34=123-`.WRL23K23fhKJFHkhFJ@1231!*@%!^';
     return utils.md5(utils.md5(xiao + pwd))
 }
+
+//生成私钥
+// The passphrase used to repeatably generate this RSA key.
+var PassPhrase = "The Moon is a Harsh Mistress."; 
+
+// The length of the RSA key, in bits.
+var Bits = 1024; 
+
+var MattsRSAkey = cryptico.generateRSAKey(PassPhrase, Bits);
+
 
 //过滤调不想暴露的数据
 const _filter = {
@@ -49,16 +61,37 @@ Router.get('/list', (req, res) => {
     })
 })
 
+//获取并返回所有用户信息
+Router.get('/allInfo',(req,res)=>{
+    User.find({}, (err, doc) => {
+        if (!err) {
+            return res.json({
+                code: 0,
+                data: doc,
+                msg: '用户列表获取成功'
+            })
+        }
+    })
+})
+
 // 注册接口
 Router.post('/register', (req, res) => {
     const {
         username,
         pwd,
-        type
+        email,
+        prov,
+        city
     } = req.body;
+    //pwd解密
+    console.log('username: ', pwd);
+    const pwdDecrypt = cryptico.decrypt(pwd, MattsRSAkey);
+    console.log('pwdDecrypt: ', pwdDecrypt['plaintext']);
+
     // 在user这个数据模型中查询用户注册的账号是否存在
     User.findOne({
-        username
+        username,
+        email
     }, (err, doc) => {
         //
         if (doc) {
@@ -75,15 +108,20 @@ Router.post('/register', (req, res) => {
         }
         User.create({
             username,
-            pwd: my_md5(pwd),
-            type
+            pwd: pwdDecrypt['plaintext'],
+            email,
+            prov,
+            city
         }, (err, doc) => {
             if (err) {
+                console.log('wrong');
+                
                 return res.json({
                     code: 1,
                     msg: '服务器异常'
                 })
             }
+            console.log('yes');
             return res.json({
                 code: 0,
                 data: doc
@@ -97,23 +135,29 @@ Router.post('/login', (req, res) => {
         username,
         pwd
     } = req.body;
-    console.log(username);
+    //pwd解密
+    console.log('username: ', pwd);
+    const pwdDecrypt = cryptico.decrypt(pwd, MattsRSAkey);
+    console.log('pwdDecrypt: ', pwdDecrypt['plaintext']);
     User.findOne({
         username,
-        pwd: my_md5(pwd)
-    }, _filter, (err, doc) => {
+        pwd: pwdDecrypt['plaintext']
+    }, (err, doc) => {
         if (!doc) {
+            console.log('Wrong!');
             return res.json({
                 code: 1,
                 msg: '账号密码不正确'
             })
         }
         if (err) {
+            console.log('err');
             return res.json({
                 code: 1,
                 msg: '服务器异常'
             })
         }
+        console.log('Login success!')
         res.cookie('userId', doc._id) // 登录成功保存cookie
         return res.json({
             code: 0,

@@ -1,0 +1,16 @@
+Form.login {
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:20%;
+    transform:translate(-50%,-50%);
+}
+
+Button#bt_lg{
+    margin-top:50px;
+}
+Button#bt_rg{
+    position: absolute;
+    margin-top:10px;
+    right:10px;
+}

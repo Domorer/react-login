@@ -1,75 +1,111 @@
-import React, {Component} from 'react'
-import {List, InputItem, WingBlank, WhiteSpace, Button, Radio} from 'antd-mobile'
-import {connect} from 'react-redux'
-import {register} from '../redux/user.redux'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {register} from '../redux/user.redux';
+import {Button, Form, Col} from 'react-bootstrap';
+import '../style/register.css';
 
-@connect(
-    state=> state,
-    {register}
-)
-
-
-
-
+@connect (state => state, {register})
 class Register extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '', //账号
-            pwd: '', // 密码
-            pwdConfirm: '', // 确认密码
-            type: 'worker', // 用户类型 默认求职者
-        }
-    }
+  constructor (props) {
+    super (props);
+    this.state = {
+      username: '', //账号
+      email: '', //邮箱
+      pwd: '', // 密码
+      prov: '', //省份
+      city: '', //城市
+    };
+  }
 
-    render() {
-        const RadioItem = Radio.RadioItem
-        return (
-            <div className="page-register">
-                <List>
-                    <InputItem onChange={value => this.handleChange('username', value)}>lbj-账号</InputItem>
-                    <InputItem onChange={value => this.handleChange('pwd', value)}>lbj-密码</InputItem>
-                    <InputItem onChange={value => this.handleChange('pwdConfirm', value)}>lbj-确认</InputItem>
-                </List>
-                <WhiteSpace></WhiteSpace>
-                <List>
-                    <RadioItem
-                        onClick={() => this.handleChange('type', 'worker')}
-                        checked={this.state.type === 'worker'}>牛人    </RadioItem>
-                    <RadioItem
-                        onClick={() => this.handleChange('type', 'boss')}
-                        checked={this.state.type === 'boss'}>BOSS</RadioItem>
-                </List>
-                <WhiteSpace></WhiteSpace>
-                <WhiteSpace></WhiteSpace>
-                <WhiteSpace></WhiteSpace>
-                <WingBlank>
-                    <Button type="primary" onClick={()=>this.handleRegister}>注册</Button>
-                    <WhiteSpace></WhiteSpace>
-                    <Button onClick={()=>this.handleGoLogin.bind(this)} type="primary">已有账号，去登录</Button>
-                </WingBlank>
-            </div>
-        )
-    }
-    handleRegister() {
-        this.props.register(this.state)
-    }
-    /*
+  render () {
+    return (
+      <div>
+        <Form className="register">
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridEmail">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="username"
+                placeholder="Enter username"
+                onChange={e => this.handleChange ('username', e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                onChange={e => this.handleChange ('pwd', e.target.value)}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Group controlId="formGridAddress1">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              placeholder="Enter your email"
+              type="email"
+              onChange={e => this.handleChange ('email', e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridProvince">
+              <Form.Label>Province</Form.Label>
+              <Form.Control
+                onChange={e => this.handleChange ('prov', e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridCity">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                onChange={e => this.handleChange ('city', e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridAddress">
+              <Form.Label>Address</Form.Label>
+              <Form.Control />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Group id="formGridCheckbox">
+            <Form.Check type="checkbox" label="Agree to terms and conditions" />
+          </Form.Group>
+
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={() => this.handleRegister ().bind (this)}
+          >
+            注册
+          </Button>
+        </Form>
+      </div>
+    );
+  }
+  handleRegister () {
+    console.log ('yes!');
+    this.props.register (this.state);
+    console.log (this.state);
+  }
+  /*
     *     去登录
     * */
-    handleGoLogin() {
-        this.props.history.push('/login')
-    }
+  handleGoLogin () {
+    this.props.history.push ('/login');
+  }
 
-    /*
+  /*
     *     绑定表单值
     * */
-    handleChange(key, val) {
-        this.setState({
-            [key]: val
-        })
-    }
-
+  handleChange (key, val) {
+    this.setState ({
+      [key]: val,
+    });
+  }
 }
 
-export default Register
+export default Register;

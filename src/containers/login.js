@@ -1,40 +1,60 @@
 import React, { Component } from 'react'
-import { List, InputItem, WingBlank, WhiteSpace } from 'antd-mobile'
-import '../bootstrap/css/bootstrap.css'
-import {Button} from 'react-bootstrap'
-import {connect} from 'react-redux'
-import {login} from '../redux/user.redux'
+import '../bootstrap/css/bootstrap.min.css'
 
-@connect (
+import '../style/login.css'
+
+import { Button, Form, Col, Row } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { login } from '../redux/user.redux'
+
+@connect(
     state => state,
-    {login}
+    { login }
 )
 class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '', //账号
+            pwd: '', // 密码
+        }
+    }
     render() {
         return (
-            <div className="page-login">
-                <Button  variant='primary'>test</Button>
-                <List>
-                    <InputItem>lbj-账号</InputItem>
-                    <InputItem>lbj-密码</InputItem>
-                </List>
-                <WingBlank>
-                    <Button type="primary" onClick={()=>this.handleLogin}>登录</Button>
-                    <WhiteSpace></WhiteSpace>
-                    <Button onClick={()=>this.handleGoRegister.bind(this)} type="primary">去注册</Button>
-                </WingBlank>
-            </div>
-            
+            <Form className='login'>
+                <Row>
+                    <Col >
+                        <Form.Control type="username" placeholder="Enter username" onChange={(e) => this.handleChange('username', e.target.value)} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col >
+                        <Form.Control type="password" placeholder="password" onChange={(e) => this.handleChange('pwd', e.target.value)} />
+                    </Col>
+                </Row>
+                <Form.Text className="text-muted">
+                    没有账号？去<a href='/register'>注册</a>.
+                    </Form.Text>
+                <Button id='bt_lg' variant="primary" type="submit" onClick={() => this.handleLogin().bind(this)} block>登录</Button>
+            </Form>
         )
     }
     /*
     *     去注册
     * */
     handleLogin() {
+        console.log('test');
         this.props.login(this.state)
     }
+
     handleGoRegister() {
         this.props.history.push('/register');
+    }
+
+    handleChange(key, val) {
+        this.setState({
+            [key]: val
+        })
     }
 }
 

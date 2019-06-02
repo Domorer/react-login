@@ -15,7 +15,9 @@ const models = {
     user: {
         'username': {type:String, require: true}, // 账号
         'pwd': {type:String, require: true}, // 密码
-        'type': {type:String, require: true} // 用户类型
+        'email': {type:String, require: true}, // 邮箱
+        'prov':{type:String}, //省份
+        'city':{type:String} //城市
     }
 }
 
