@@ -31,6 +31,7 @@ import reducer from './reducer'
 const store = createStore(reducer, compose(
     applyMiddleware(thunk), window.devToolsExtension ? window.devToolsExtension() : f => f
 ))
+console.log("store: ", store.getState());
 
 
 
@@ -39,10 +40,10 @@ ReactDOM.render(
         <Router>
             <div className="react-login-register">
                 {/* <CheckLogin> */}
-                    <Route exact path='/login' component={Login}></Route>
-                    <Route exact path='/register' component={Register}></Route>
                     <Route exact path='/info' component={Info}></Route>
                 {/* </CheckLogin> */}
+                <Route exact path='/login' component={Login}></Route>
+                <Route exact path='/register' component={Register}></Route>
             </div>
         </Router>
     </Provider>,

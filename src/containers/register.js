@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { register } from '../redux/user.redux';
 import { Button, Form, Col } from 'react-bootstrap';
 import '../style/register.css';
-import {withRouter} from 'react-router-dom'
-@withRouter
+
+import { Redirect } from 'react-router-dom'
+
 @connect(state => state, { register })
 class Register extends Component {
   constructor(props) {
@@ -83,19 +84,14 @@ class Register extends Component {
           >
             注册
           </Button>
+          {/* {this.props.user.redirectTo ? <Redirect to={this.props.user.redirectTo}></Redirect> : null}
+          <div className="err-show">{this.props.user.msg ? this.props.user.msg : ''}</div> */}
         </Form>
       </div>
     );
   }
   handleRegister = () => {
     this.props.register(this.state);
-    this.props.history.push('/login')
-  }
-  /*
-    *     去登录
-    * */
-  handleGoLogin = () => {
-    this.props.history.push('/login');
   }
 
   /*

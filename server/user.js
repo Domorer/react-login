@@ -8,13 +8,9 @@ const utils = require('utility')
 
 // 生成express路由中间件
 const Router = express.Router();
-const PUBLICK_KEY = 'uXjrkGqe5WuS7zsTg6Z9DuS8cXLFz38ue+xrFzxrcQJCXtVccCoUFP2qH/AQ4qMvxxvqkSYBpRm1R5a4/NdQ5ei8sE8gfZEq7dlcR+gOSv3nnS4/CX1n5Z5m8bvFPF0lSZnYQ23xlyjXTaNacmV0IuZbqWd4j9LfdAKq5dvDaoE='
 
 // 封装MD5加密规则
-function my_md5(pwd) {
-    const xiao = 'akdf352FHhjfFHI34=123-`.WRL23K23fhKJFHkhFJ@1231!*@%!^';
-    return utils.md5(utils.md5(xiao + pwd))
-}
+
 
 //生成私钥
 // The passphrase used to repeatably generate this RSA key.
@@ -34,9 +30,17 @@ const _filter = {
 
 // CheckLogin.js 用户查询用户是否登录的接口
 Router.get('/info', (req, res) => {
-    return res.json({
-        code: 1,
-        msg: '未登录'
+    const {userId} = req.cookies
+    if (!userId) {
+        res.json({code: 1, msg: '用户未登录'})
+    }
+    User.findOne({_id: userId}, _filter, (err, doc) => {
+        if (err) {
+            return res.json({code: 1, msg: '服务器异常'})
+        }
+        if (doc) {
+            return res.json({code: 0, msg: '用户已登录',data: doc})
+        }
     })
 })
 
@@ -134,9 +138,11 @@ Router.post('/register', (req, res) => {
 Router.post('/login', (req, res) => {
     const {
         username,
-        pwd
+        pwd,
+        dispatch
     } = req.body;
     //pwd解密
+    console.log('dispatch: ', dispatch);
     console.log('username: ', pwd);
     const pwdDecrypt = cryptico.decrypt(pwd, MattsRSAkey);
     console.log('pwdDecrypt: ', pwdDecrypt['plaintext']);
@@ -169,19 +175,13 @@ Router.post('/login', (req, res) => {
 })
 
 
-Router.get('/info', (req, res) => {
-    const {userId} = req.cookies
-    if (!userId) {
-        res.json({code: 1, msg: '用户未登录'})
+Router.get('/loginOut', (req, res) => {
+    const {userId} = req.cookies;
+    if(!userId) {
+        res.json({code: 1, msg: '服务器异常'})
     }
-    User.findOne({_id: userId}, _filter, (err, doc) => {
-        if (err) {
-            return res.json({code: 1, msg: '服务器异常'})
-        }
-        if (doc) {
-            return res.json({code: 0, msg: '用户已登录',data: doc})
-        }
-    })
+    res.cookie('userId','');
+    return res.json({code: 0, msg:'退出成功'})
 })
 
 module.exports = Router

@@ -4,20 +4,18 @@ Table{
 }
 
 Table#cardDecrypt{
-    position:absolute;
     width:47%;
-    top:1%;
-    left:1%;
-   
+    float: left;
+    margin-left:2%;
+    margin-right:2%;
 }
 
 Table#cardEncrypt{
-    position:absolute;
+
     width:47%;
-    top:1%;
-    right:1%;
     text-align: center;
     table-layout: fixed;
+    margin-top:1%;
 }    
 
 td{
