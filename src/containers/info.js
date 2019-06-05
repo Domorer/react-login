@@ -67,9 +67,9 @@ class Info extends Component {
                 let encryptInfo = res.data.data;
 
                 for (let i = 0; i < encryptInfo.length; i++) {
-                    encryptInfo[i].pwd = cryptico.encrypt(encryptInfo[i].pwd, PUBLICK_KEY)['cipher'];
-                    encryptInfo[i].email = cryptico.encrypt(encryptInfo[i].email, PUBLICK_KEY)['cipher']
-                    encryptInfo[i].city = cryptico.encrypt(encryptInfo[i].city, PUBLICK_KEY)['cipher']
+                    encryptInfo[i].pwd = cryptico.decrypt(encryptInfo[i].pwd, PUBLICK_KEY)['plaintext'];
+                    encryptInfo[i].email = cryptico.decrypt(encryptInfo[i].email, PUBLICK_KEY)['plaintext']
+                    encryptInfo[i].city = cryptico.decrypt(encryptInfo[i].city, PUBLICK_KEY)['plaintext']
                 }
                 console.log('encryptInfo: ', encryptInfo);
                 this.setState({

@@ -5,12 +5,12 @@ import '../style/login.css'
 
 import { Button, Form} from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { login, user} from '../redux/user.redux'
-import { Redirect } from 'react-router-dom'
+import { login, test} from '../redux/user.redux'
+// import { Redirect } from 'react-router-dom'
 
 @connect(
     state => state,
-    { login, user}
+    {login}
 )
 class Login extends Component {
     constructor(props) {
@@ -57,13 +57,16 @@ class Login extends Component {
             </Form>
         )
     }
+
+    componentDidMount(){
+        console.log(this.props);
+    }
     /*
     *     去注册
     * */
     handleLogin = () => {
-        console.log('test');
-        this.props.login(this.state).bind(this)
-        // this.props.history.push('/info')
+        this.props.login(this.state)
+        this.props.history.push('/info')
     }
 
     handleGoRegister = () => {

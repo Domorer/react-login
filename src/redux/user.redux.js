@@ -18,22 +18,29 @@ let initState = {
     isLogin: false // 是否登录
 }
 
+
+
 export function user(state = initState, action) {
+    console.log('I worked!');
     switch (action.type) {
         case REGISTER_SUCCESS:
             return {
                 ...state, ...action.data, msg: '', redirectTo: ''
             }
-        case LOGIN_SUCCESS:
+        case LOGIN_SUCCESS:{
+            console.log('Login success!');
             return {
-                ...state, ...action.data, msg: '', redirectTo: ''
+                ...state, ...action.data, msg: '', redirectTo: '/login'
             }
+        }
+            
         case TODO_ERRSHOW:
             return {
                 ...state, msg: action.msg
             }
-        default:
+        default:{
             return state;
+        }
     }
 }
 
@@ -73,9 +80,7 @@ function loginOutSuccess(data) {
     }
 }
 
-export function test(){
-    
-}
+
 // register是一个action creator ，返回的action供user这个reducer使用，从而改变state
 export function register({
     username,
@@ -102,9 +107,9 @@ export function register({
         axios.post('/user/register', qs.stringify(info))
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
-                    dispatch(registerSuccess(res.data.data))
+                    return dispatch(registerSuccess(res.data.data))
                 } else {
-                    dispatch(registerFail(res.data.msg))
+                    return dispatch(registerFail(res.data.msg))
                 }
             })
     }
@@ -124,23 +129,27 @@ export function login({
     }
     const pwdEncrypt = cryptico.encrypt(pwd, PUBLICK_KEY);
     console.log('pwdEncrypt: ', pwdEncrypt);
-
     return dispatch => {
+        console.log("Login worked")
         axios.post('/user/login', {
             username,
-            pwd: pwdEncrypt['cipher'],
-            dispatch,
+            pwd: pwdEncrypt['cipher']
         }).then(res => {
             if (res.status === 200 && res.data.code === 0) {
-                dispatch(loginSuccess(res.data.data))
+                console.log(res.data);
+                return dispatch(loginSuccess(res.data.data))
             } else {
-                dispatch(toDoFail(res.data.msg))
+                return dispatch(toDoFail(res.data.msg))
             }
         })
     }
 }
 
-
+export function test(){
+    return dispatch=>{
+        dispatch(loginSuccess(1));
+    }
+}
 
 export function loginOut() {
     return dispatch => {

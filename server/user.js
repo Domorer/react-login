@@ -11,16 +11,12 @@ const Router = express.Router();
 
 // 封装MD5加密规则
 
-
 //生成私钥
 // The passphrase used to repeatably generate this RSA key.
-var PassPhrase = "The Moon is a Harsh Mistress."; 
-
+var PassPhrase = "The Moon is a Harsh Mistress.";
 // The length of the RSA key, in bits.
-var Bits = 1024; 
-
+var Bits = 1024;
 var MattsRSAkey = cryptico.generateRSAKey(PassPhrase, Bits);
-
 
 //过滤调不想暴露的数据
 const _filter = {
@@ -30,16 +26,16 @@ const _filter = {
 
 // CheckLogin.js 用户查询用户是否登录的接口
 Router.get('/info', (req, res) => {
-    const {userId} = req.cookies
+    const { userId } = req.cookies
     if (!userId) {
-        res.json({code: 1, msg: '用户未登录'})
+        res.json({ code: 1, msg: '用户未登录' })
     }
-    User.findOne({_id: userId}, _filter, (err, doc) => {
+    User.findOne({ _id: userId }, _filter, (err, doc) => {
         if (err) {
-            return res.json({code: 1, msg: '服务器异常'})
+            return res.json({ code: 1, msg: '服务器异常' })
         }
         if (doc) {
-            return res.json({code: 0, msg: '用户已登录',data: doc})
+            return res.json({ code: 0, msg: '用户已登录', data: doc })
         }
     })
 })
@@ -66,9 +62,14 @@ Router.get('/list', (req, res) => {
 })
 
 //获取并返回所有用户信息
-Router.get('/allInfo',(req,res)=>{
+Router.get('/allInfo', (req, res) => {
     User.find({}, (err, doc) => {
         if (!err) {
+            for (let i = 0; i < doc.length; i++) {
+                doc[i].pwd = cryptico.encrypt(doc[i].pwd, MattsRSAkey)['cipher'];
+                doc[i].email = cryptico.encrypt(doc[i].email, MattsRSAkey)['cipher'];
+                doc[i].city = cryptico.encrypt(doc[i].city, MattsRSAkey)['cipher'];
+            }
             return res.json({
                 code: 0,
                 data: doc,
@@ -120,7 +121,7 @@ Router.post('/register', (req, res) => {
         }, (err, doc) => {
             if (err) {
                 console.log('wrong');
-                
+
                 return res.json({
                     code: 1,
                     msg: '服务器异常'
@@ -138,11 +139,9 @@ Router.post('/register', (req, res) => {
 Router.post('/login', (req, res) => {
     const {
         username,
-        pwd,
-        dispatch
+        pwd
     } = req.body;
     //pwd解密
-    console.log('dispatch: ', dispatch);
     console.log('username: ', pwd);
     const pwdDecrypt = cryptico.decrypt(pwd, MattsRSAkey);
     console.log('pwdDecrypt: ', pwdDecrypt['plaintext']);
@@ -176,12 +175,12 @@ Router.post('/login', (req, res) => {
 
 
 Router.get('/loginOut', (req, res) => {
-    const {userId} = req.cookies;
-    if(!userId) {
-        res.json({code: 1, msg: '服务器异常'})
+    const { userId } = req.cookies;
+    if (!userId) {
+        res.json({ code: 1, msg: '服务器异常' })
     }
-    res.cookie('userId','');
-    return res.json({code: 0, msg:'退出成功'})
+    res.cookie('userId', '');
+    return res.json({ code: 0, msg: '退出成功' })
 })
 
 module.exports = Router
