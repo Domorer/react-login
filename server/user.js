@@ -65,11 +65,7 @@ Router.get('/list', (req, res) => {
 Router.get('/allInfo', (req, res) => {
     User.find({}, (err, doc) => {
         if (!err) {
-            for (let i = 0; i < doc.length; i++) {
-                doc[i].pwd = cryptico.encrypt(doc[i].pwd, MattsRSAkey)['cipher'];
-                doc[i].email = cryptico.encrypt(doc[i].email, MattsRSAkey)['cipher'];
-                doc[i].city = cryptico.encrypt(doc[i].city, MattsRSAkey)['cipher'];
-            }
+            
             return res.json({
                 code: 0,
                 data: doc,

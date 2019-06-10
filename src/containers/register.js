@@ -84,8 +84,8 @@ class Register extends Component {
           >
             注册
           </Button>
-          {this.props.user.redirectTo ? <Redirect to={this.props.user.redirectTo}></Redirect> : null}
-          <div className="err-show">{this.props.user.msg ? this.props.user.msg : ''}</div>
+          {/* {this.props.user.redirectTo ? <Redirect to={this.props.user.redirectTo}></Redirect> : null}
+          <div className="err-show">{this.props.user.msg ? this.props.user.msg : ''}</div> */}
         </Form>
       </div>
     );

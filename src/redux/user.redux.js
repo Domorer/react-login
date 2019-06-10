@@ -25,9 +25,15 @@ export function user(state = initState, action) {
     switch (action.type) {
         case REGISTER_SUCCESS:
             return {
-                ...state, ...action.data, msg: '', redirectTo: ''
+                ...state, ...action.data, msg: '', redirectTo: '/login'
             }
         case LOGIN_SUCCESS:{
+            console.log('Login success!');
+            return {
+                ...state, ...action.data, msg: '', redirectTo: '/info'
+            }
+        }
+        case LOGINOUT_SUCCESS:{
             console.log('Login success!');
             return {
                 ...state, ...action.data, msg: '', redirectTo: '/login'
@@ -137,7 +143,9 @@ export function login({
         }).then(res => {
             if (res.status === 200 && res.data.code === 0) {
                 console.log(res.data);
+                window.location.href = 'login'
                 return dispatch(loginSuccess(res.data.data))
+
             } else {
                 return dispatch(toDoFail(res.data.msg))
             }

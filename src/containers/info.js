@@ -48,7 +48,7 @@ class Info extends Component {
                 </Navbar>
                 <div>
                     <InfoTable data={this.state.dataDecrypt} bgColor={'dark'} cardId={'cardDecrypt'} key={'Decrypt'}></InfoTable>
-                    <InfoTable data={this.state.dataEncrypt} bgColor={'dark'} cardId={'cardEncrypt'} key={'Encrypt'}></InfoTable>
+                    {/* <InfoTable data={this.state.dataEncrypt} bgColor={'dark'} cardId={'cardEncrypt'} key={'Encrypt'}></InfoTable> */}
                 </div>
 
             </div>
@@ -66,11 +66,7 @@ class Info extends Component {
                 //展示加密的结果
                 let encryptInfo = res.data.data;
 
-                for (let i = 0; i < encryptInfo.length; i++) {
-                    encryptInfo[i].pwd = cryptico.decrypt(encryptInfo[i].pwd, PUBLICK_KEY)['plaintext'];
-                    encryptInfo[i].email = cryptico.decrypt(encryptInfo[i].email, PUBLICK_KEY)['plaintext']
-                    encryptInfo[i].city = cryptico.decrypt(encryptInfo[i].city, PUBLICK_KEY)['plaintext']
-                }
+                
                 console.log('encryptInfo: ', encryptInfo);
                 this.setState({
                     dataEncrypt: encryptInfo
