@@ -7,15 +7,11 @@ import '../style/login.css'
 import { Button, Form } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { login, test } from '../redux/user.redux'
-import { Redirect } from 'react-router-dom'
 import { resolve } from 'path';
 const cryptico = require('cryptico')
 const PUBLICK_KEY = 'uXjrkGqe5WuS7zsTg6Z9DuS8cXLFz38ue+xrFzxrcQJCXtVccCoUFP2qH/AQ4qMvxxvqkSYBpRm1R5a4/NdQ5ei8sE8gfZEq7dlcR+gOSv3nnS4/CX1n5Z5m8bvFPF0lSZnYQ23xlyjXTaNacmV0IuZbqWd4j9LfdAKq5dvDaoE='
 
-// @connect(
-//     state => state,
-//     {login}
-// )
+
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -56,8 +52,7 @@ class Login extends Component {
                     没有账号？去<a href='/register'>注册</a>.
                     </Form.Text>
                 <Button id='bt_lg' variant="primary" type="button" onClick={() => this.handleLogin()} block>登录</Button>
-                {/* {this.props.user.redirectTo ? <Redirect to={this.props.user.redirectTo}></Redirect> : null}
-                <div className="err-show">{this.props.user.msg ? this.props.user.msg : ''}</div> */}
+               
             </Form>
         )
     }
@@ -82,7 +77,6 @@ class Login extends Component {
                         alert('账号密码错误，登入失败');
                     }
                 })
-        
     }
 
     handleGoRegister = () => {

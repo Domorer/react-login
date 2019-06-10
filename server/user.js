@@ -30,14 +30,19 @@ Router.get('/info', (req, res) => {
     if (!userId) {
         res.json({ code: 1, msg: '用户未登录' })
     }
-    User.findOne({ _id: userId }, _filter, (err, doc) => {
-        if (err) {
-            return res.json({ code: 1, msg: '服务器异常' })
-        }
-        if (doc) {
-            return res.json({ code: 0, msg: '用户已登录', data: doc })
-        }
-    })
+    else{
+        console.log('userId: ', userId);
+
+        User.findOne({ _id: userId }, _filter, (err, doc) => {
+            if (err) {
+                return res.json({ code: 1, msg: '服务器异常' })
+            }
+            if (doc) {
+                return res.json({ code: 0, msg: '用户已登录', data: doc })
+            }
+        })
+    }
+ 
 })
 
 // 获取注册用户列表
@@ -63,16 +68,22 @@ Router.get('/list', (req, res) => {
 
 //获取并返回所有用户信息
 Router.get('/allInfo', (req, res) => {
-    User.find({}, (err, doc) => {
-        if (!err) {
-            
-            return res.json({
-                code: 0,
-                data: doc,
-                msg: '用户列表获取成功'
-            })
-        }
-    })
+    const { userId } = req.cookies
+    if (!userId) {
+        res.json({ code: 1, msg: '用户未登录' })
+    }else{
+        User.find({}, (err, doc) => {
+            if (!err) {
+                
+                return res.json({
+                    code: 0,
+                    data: doc,
+                    msg: '用户列表获取成功'
+                })
+            }
+        })
+    }
+   
 })
 
 // 注册接口

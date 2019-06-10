@@ -16,9 +16,7 @@ class CheckLogin extends Component {
                 if (res.status === 200) {
                     if (res.data.code === 0) {
                         console.log(res.data);
-                        this.props.history.push('/info');
                     } else {
-                        // window.location.href=('http://localhost:3000/login');
                         this.props.history.push('/login');
                     }
                 }

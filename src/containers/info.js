@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import InfoTable from '../components/infoCards'
 import axios from 'axios'
 import { Navbar, Nav, Button, Form } from 'react-bootstrap'
-import { connect } from 'react-redux'
-import { loginOut} from '../redux/user.redux'
+import { reject, nextTick } from 'q';
+// import { connect } from 'react-redux'
+// import { loginOut} from '../redux/user.redux'
 
 const cryptico = require('cryptico')
 const PUBLICK_KEY = 'uXjrkGqe5WuS7zsTg6Z9DuS8cXLFz38ue+xrFzxrcQJCXtVccCoUFP2qH/AQ4qMvxxvqkSYBpRm1R5a4/NdQ5ei8sE8gfZEq7dlcR+gOSv3nnS4/CX1n5Z5m8bvFPF0lSZnYQ23xlyjXTaNacmV0IuZbqWd4j9LfdAKq5dvDaoE='
@@ -13,10 +14,10 @@ const styleInfo = {
     height: '100%',
 }
 
-@connect(
-    state=>state,
-    {loginOut}
-)
+// @connect(
+//     state=>state,
+//     {loginOut}
+// )
 
 class Info extends Component {
     constructor(props) {
@@ -42,7 +43,7 @@ class Info extends Component {
                             <Nav.Link href="#link">Link</Nav.Link>
                         </Nav>
                         <Form inline>
-                            <Button variant="outline-success" onClick={()=>this.handleLoginOut()}>Logout</Button>
+                            <Button variant="outline-success" onClick={() => this.handleLoginOut()}>Logout</Button>
                         </Form>
                     </Navbar.Collapse>
                 </Navbar>
@@ -55,31 +56,56 @@ class Info extends Component {
         )
     }
     componentDidMount() {
-
-        axios.get('/user/allInfo')
-            .then((res) => {
-                console.log(res);
-
-                this.setState({
-                    dataDecrypt: res.data.data
-                })
-                //展示加密的结果
-                let encryptInfo = res.data.data;
-
-                
-                console.log('encryptInfo: ', encryptInfo);
-                this.setState({
-                    dataEncrypt: encryptInfo
-                })
+        axios.get('/user/info')
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.code === 0) {
+                        console.log(res.data);
+                        return true;
+                    } else {
+                        return this.props.history.push('/login');
+                    }
+                }
+                return;
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+            .then(value => {
+                if (!value) {
+                    return;
+                }
+                axios.get('/user/allInfo')
+                    .then((res) => {
+                        console.log(res);
+                        this.setState({
+                            dataDecrypt: res.data.data
+                        })
+                        //展示加密的结果
+                        let encryptInfo = res.data.data;
+                        console.log('encryptInfo: ', encryptInfo);
+                        this.setState({
+                            dataEncrypt: encryptInfo
+                        })
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(reson => {
+                console.log('Get information failed !');
+            })
+
+
     }
 
 
     handleLoginOut = () => {
         // this.props.loginOut();
+        axios.get('/user/loginOut')
+            .then(res => {
+                if (res.status === 200 && res.data.code === 0) {
+                    this.props.history.push('/login')
+                } else {
+                    alert('退出失败')
+                }
+            })
     }
 }
 

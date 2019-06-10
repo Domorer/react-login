@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { register } from '../redux/user.redux';
 import { Button, Form, Col } from 'react-bootstrap';
 import '../style/register.css';
+import qs from 'qs'
+import axios from 'axios' // 用axios做请求
 
-import { Redirect } from 'react-router-dom'
+const cryptico = require('cryptico')
+const PUBLICK_KEY = 'uXjrkGqe5WuS7zsTg6Z9DuS8cXLFz38ue+xrFzxrcQJCXtVccCoUFP2qH/AQ4qMvxxvqkSYBpRm1R5a4/NdQ5ei8sE8gfZEq7dlcR+gOSv3nnS4/CX1n5Z5m8bvFPF0lSZnYQ23xlyjXTaNacmV0IuZbqWd4j9LfdAKq5dvDaoE='
 
-@connect(state => state, { register })
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -79,19 +80,37 @@ class Register extends Component {
 
           <Button
             variant="primary"
-            type="submit"
+            type="button"
             onClick={() => this.handleRegister()}
           >
             注册
           </Button>
-          {/* {this.props.user.redirectTo ? <Redirect to={this.props.user.redirectTo}></Redirect> : null}
-          <div className="err-show">{this.props.user.msg ? this.props.user.msg : ''}</div> */}
+
         </Form>
       </div>
     );
   }
   handleRegister = () => {
-    this.props.register(this.state);
+    if (!this.state.username || !this.state.pwd) {
+      alert('账号密码不能为空')
+    } else {
+      //加密 pwd
+      const pwdEncrypt = cryptico.encrypt(this.state.pwd, PUBLICK_KEY);
+      console.log('pwdEncrypt: ', pwdEncrypt);
+      let info = this.state;
+      info['pwd'] = pwdEncrypt['cipher']
+      axios.post('/user/register', qs.stringify(info))
+        .then(res => {
+          if (res.status === 200 && res.data.code === 0) {
+            alert('注册成功！');
+            this.props.history.push('/login');
+          } else {
+            alert('注册失败')
+          }
+        })
+
+    }
+
   }
 
   /*

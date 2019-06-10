@@ -20,7 +20,7 @@ import {
 } from 'react-router-dom'
 
 // 引入判断是否登录组件
-// import CheckLogin from './components/checkLogin'
+import CheckLogin from './components/checkLogin'
 // 引入页面路由组件
 import Login from './containers/login'
 import Register from './containers/register'
@@ -38,11 +38,11 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <div className="react-login-register">
-                {/* <CheckLogin> */}
-                <Route exact path='/info' component={Info}></Route>
-                {/* </CheckLogin> */}
                 <Route exact path='/login' component={Login}></Route>
                 <Route exact path='/register' component={Register}></Route>
+                <Route path='/info' component={Info}></Route>
+               
+
             </div>
         </Router>
     </Provider>,
